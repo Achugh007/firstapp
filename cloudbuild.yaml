@@ -1,0 +1,3 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/sks001/my-app:$COMMIT_SHA', '-f', 'Dockerfile', '.'] # Add '-f Dockerfile' 
