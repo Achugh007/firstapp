@@ -1,0 +1,30 @@
+# Build Stage
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/sks001/my-app:$COMMIT_SHA', '-f', 'Dockerfile', '.'] 
+
+# Push Stage
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/sks001/my-app:$COMMIT_SHA']
+
+# Deploy Stage
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: 
+    - 'run'
+    - 'deploy'
+    - 'my-app' # Or your service name
+    - '--image'
+    - 'gcr.io/sks001/my-app:$COMMIT_SHA'
+    - '--region'
+    - '${_DEPLOY_REGION}' 
+    - '--platform'
+    - 'managed'
+    # Uncomment the following line if you want public access (not recommended for production)
+    #- '--allow-unauthenticated' 
+
+images:
+- 'gcr.io/sks001/my-app:$COMMIT_SHA'
+
+substitutions:
+  _DEPLOY_REGION: 'us-central1' # Default region; override this in the trigger
