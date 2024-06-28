@@ -1,11 +1,31 @@
----
+# Build Stage
 steps:
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - -t
-      - us-west2-docker.pkg.dev/test-aaff3/quickstart-docker-repo/quickstart-image:tag1
-      - .
-    automapSubstitutions: true
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/sks001/my-app:$COMMIT_SHA', '.']
+  
+# Push Stage
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/sks001/my-app:$COMMIT_SHA']
+
+# Deploy Stage
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - 'my-app' # Or your service name
+    - '--image'
+    - 'gcr.io/sks001/my-app:$COMMIT_SHA'
+    - '--region'
+    - '${_DEPLOY_REGION}' 
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated' # Optional: Allow public access (not recommended for production)
+
+# (Optional) Additional steps for other environments or deployment targets
+
 images:
-  - us-west2-docker.pkg.dev/test-aaff3/quickstart-docker-repo/quickstart-image:tag1
+- 'gcr.io/sks001/my-app:$COMMIT_SHA'
+
+substitutions:
+  _DEPLOY_REGION: 'us-central1' # Default region; override this in the trigger
