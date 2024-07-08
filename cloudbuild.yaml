@@ -1,5 +1,6 @@
 steps:
- - name: 'gcr.io/cloud-builders/docker' #use the official docker image
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-image:$COMMIT_SHA', '.']  #builds an image and tags it
+  - name: 'gcr.io/cloud-builders/docker'  # Use the official Docker image
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-image:$COMMIT_SHA', '.']  # Builds an image and tags it
 images:
- - 'gcr.io/$PROJECT_ID/my-image:$COMMIT_SHA'  #store the image in the container registry
+  - 'gcr.io/$PROJECT_ID/my-image:$COMMIT_SHA'  # Store the image in the Container Registry
+
