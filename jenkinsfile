@@ -1,9 +1,9 @@
 pipeline {
-    agent any 
+    agent any
     stages {
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'CleanBeforeCheckout']], userRemoteConfigs: [[credentialsId: 'YOUR_GITHUB_CREDENTIAL_ID', url: 'https://github.com/Achugh007/firstapp']]]) 
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'CleanBeforeCheckout']], userRemoteConfigs: [[credentialsId: '0bc31df3-9f4d-4b47-bc3b-29baafc5fee7', url: 'https://github.com/Achugh007/firstapp']]]) 
             }
         }
         stage('Trigger Cloud Build') {
@@ -13,3 +13,4 @@ pipeline {
         } 
     }
 }
+
