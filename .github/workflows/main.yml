@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Vault CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y vault
+
+    - name: Access Secret
+      env:
+        VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+        VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      run: |
+        vault kv get myapp/config
